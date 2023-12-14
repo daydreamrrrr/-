@@ -6,20 +6,14 @@ package employees.developers;
 public class Frontend extends Developer {
 
     /**
-     * Мова
-     */
-    private String frontendSkill;
-
-    /**
      * Конструктор
      *
      * @param name ім'я
      * @param salary зарплата
-     * @param frontendSkill мова
+     * @param skill мова
      */
-    public Frontend(String name, double salary, String frontendSkill) {
-        super(name, salary);
-        this.frontendSkill = frontendSkill;
+    public Frontend(String name, double salary, String skill) {
+        super(name, salary, skill);
     }
 
     /**
@@ -28,5 +22,13 @@ public class Frontend extends Developer {
     @Override
     public void printSalary() {
         System.out.println("Зарплата Frontend розробника " + name + ": " + salary + "$");
+    }
+
+    /**
+     * Інформація про мови
+     */
+    @Override
+    public void printSkill() {
+        System.out.println("Мова програмування: " + skill);
     }
 }

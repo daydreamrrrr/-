@@ -6,20 +6,14 @@ package employees.developers;
 public class Backend extends Developer {
 
     /**
-     * Мова
-     */
-    private String backendSkill;
-
-    /**
      * Конструктор
      *
      * @param name ім'я
-     * @param salary зарплатаF
-     * @param backendSkill мова
+     * @param salary зарплата
+     * @param skill мова
      */
-    public Backend(String name, double salary, String backendSkill) {
-        super(name, salary);
-        this.backendSkill = backendSkill;
+    public Backend(String name, double salary, String skill) {
+        super(name, salary, skill);
     }
 
     /**
@@ -28,5 +22,13 @@ public class Backend extends Developer {
     @Override
     public void printSalary() {
         System.out.println("Зарплата Backend розробника " + name + ": " + salary + "$");
+    }
+
+    /**
+     * Інформація про мови
+     */
+    @Override
+    public void printSkill() {
+        System.out.println("Мова програмування: " + skill);
     }
 }

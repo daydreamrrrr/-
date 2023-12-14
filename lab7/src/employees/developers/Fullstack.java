@@ -6,26 +6,14 @@ package employees.developers;
 public class Fullstack extends Developer {
 
     /**
-     * Мова бекенду
-     */
-    private String backendSkill;
-    /**
-     * Мова фронтенду
-     */
-    private String frontendSkill;
-
-    /**
      * Конструктор
      *
      * @param name ім'я
      * @param salary зарплата
-     * @param backendSkill мова бекенду
-     * @param frontendSkill мова фронтенду
+     * @param skill мова
      */
-    public Fullstack(String name, double salary, String backendSkill, String frontendSkill) {
-        super(name, salary);
-        this.backendSkill = backendSkill;
-        this.frontendSkill = frontendSkill;
+    public Fullstack(String name, double salary, String skill) {
+        super(name, salary, skill);
     }
 
     /**
@@ -36,4 +24,11 @@ public class Fullstack extends Developer {
         System.out.println("Зарплата Fullstack розробника " + name + ": " + salary + "$");
     }
 
+    /**
+     * Інформація про мови
+     */
+    @Override
+    public void printSkill() {
+        System.out.println("Мова програмування: " + skill);
+    }
 }

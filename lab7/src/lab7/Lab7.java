@@ -51,10 +51,12 @@ public class Lab7 {
             }
         } while (choice != 0);
     }
-/**
- * Внутрішнє меню
- * @param s сканер
- */
+
+    /**
+     * Внутрішнє меню
+     *
+     * @param s сканер
+     */
     private static void handleDeveloperMenu(Scanner s) {
         /**
          * Вибір користувача
@@ -74,6 +76,7 @@ public class Lab7 {
                      */
                     Backend backend = new Backend("Іван", 2000, "Java");
                     backend.printSalary();
+                    backend.printSkill();
                     break;
                 case 2:
                     /**
@@ -81,13 +84,15 @@ public class Lab7 {
                      */
                     Frontend frontend = new Frontend("Петро", 2000, "JavaScript");
                     frontend.printSalary();
+                    frontend.printSkill();
                     break;
                 case 3:
                     /**
                      * Екземпляр класу Fullstack
                      */
-                    Fullstack fullstack = new Fullstack("Олег", 2000, "Java", "JavaScript");
+                    Fullstack fullstack = new Fullstack("Олег", 2000, "Java, JavaScript");
                     fullstack.printSalary();
+                    fullstack.printSkill();
                     break;
                 case 0:
                     break;
