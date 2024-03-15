@@ -1,19 +1,23 @@
 package lab13;
 
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class Lab13 {
-/**
- * метод Main
- */
+
+    /**
+     * метод Main
+     */
+    private static final Scanner s = new Scanner(System.in);
+    private static final Pattern choicePattern = Pattern.compile("[1-9]\\d*");
+
     public static void main(String[] args) {
-        Scanner s = new Scanner(System.in);
         System.out.println("================= Головне меню ================");
         System.out.println(" (1) Почати гру");
         System.out.println("===============================================");
         System.out.println(" (0) Вийти з гри");
         System.out.println("===============================================");
-        int choice = s.nextInt();
+        int choice = readChoice();
         switch (choice) {
             case 1:
                 Location1 loc1 = new Location1();
@@ -28,4 +32,14 @@ public class Lab13 {
         }
     }
 
+    private static int readChoice() {
+        while (true) {
+            String input = s.next();
+            if (choicePattern.matcher(input).matches()) {
+                return Integer.parseInt(input);
+            } else {
+                System.out.println("Неправильний ввід. Спробуйте знову.");
+            }
+        }
+    }
 }

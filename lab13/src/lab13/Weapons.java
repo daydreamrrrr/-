@@ -60,7 +60,7 @@ public class Weapons {
     /**
      * д≥њ гравц€
      */
-    static class ActionBattle {
+    static class Action {
 
         /**
          * д≥€ 1

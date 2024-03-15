@@ -1,29 +1,33 @@
 package lab13;
 
 import java.util.Scanner;
-import lab13.Weapons.ActionBattle;
+import java.util.regex.Pattern;
+import lab13.Weapons.Action;
 
 /**
  * клас битви
  */
-public class Battle implements Attack{
+public class Battle implements Attack {
 
-    Scanner sc = new Scanner(System.in);
+    private static final Scanner s = new Scanner(System.in);
+    private static final Pattern choicePattern = Pattern.compile("[1-9]\\d*");
     private final String answer1 = ("Ворогу вдалося вас вдарити...");
     private final String answer2 = ("Ворог промахнувся!");
     private final String answer3 = ("Ви влучили у ворога!");
     private final String answer4 = ("Ви промахнулися...");
     private final String answer5 = ("Ви перемогли ворога!");
     private final String answer6 = ("Ворог переміг вас...");
-/**
- * метод бою
- * @param player_hp здоров'я гравця
- * @param enemy_hp здоров'я ворога
- * @param enemy_damage урон ворога
- * @param player_damage урон гравця
- * @param weapon зброя
- * @return перемога або поразка
- */
+
+    /**
+     * метод бою
+     *
+     * @param player_hp здоров'я гравця
+     * @param enemy_hp здоров'я ворога
+     * @param enemy_damage урон ворога
+     * @param player_damage урон гравця
+     * @param weapon зброя
+     * @return перемога або поразка
+     */
     public boolean fight(int player_hp, int enemy_hp, int enemy_damage, int player_damage, Weapons.Ranged weapon) {
         int action;
         while (player_hp != 0 || enemy_hp != 0) {
@@ -41,12 +45,12 @@ public class Battle implements Attack{
             System.out.println("===============================================");
             System.out.println("Здоров'я ворога: " + enemy_hp);
             System.out.println("================== Ваші дії ===================");
-            System.out.println(ActionBattle.getAction1() + " (Урон: " + (weapon.getDamage() - 10) + " Успішність: " + (weapon.getChance() - 10) + ")");
-            System.out.println(ActionBattle.getAction2() + " (Урон: " + weapon.getDamage() + " (Успішність: " + (weapon.getChance() + 20) + ")");
-            System.out.println(ActionBattle.getAction3() + " (Урон: " + (weapon.getDamage() + 30) + " (Успішність: " + (weapon.getChance() + 50) + ")");
+            System.out.println(Action.getAction1() + " (Урон: " + (weapon.getDamage() - 10) + " Успішність: " + (weapon.getChance() - 10) + ")");
+            System.out.println(Action.getAction2() + " (Урон: " + weapon.getDamage() + " (Успішність: " + (weapon.getChance() + 20) + ")");
+            System.out.println(Action.getAction3() + " (Урон: " + (weapon.getDamage() + 30) + " (Успішність: " + (weapon.getChance() + 50) + ")");
             System.out.println("===============================================");
             System.out.print("Ваші дії: ");
-            action = sc.nextInt();
+            action = readChoice();
             System.out.println();
             switch (action) {
                 case 1 ->
@@ -55,9 +59,21 @@ public class Battle implements Attack{
                     enemy_hp = attack(weapon.getChance(), weapon.getDamage() + 20, enemy_hp, answer3, answer4);
                 case 3 ->
                     enemy_hp = attack(weapon.getChance() + 30, weapon.getDamage() - 10, enemy_hp, answer3, answer4);
+                default ->
+                    System.out.println("Неправильний ввід. Спробуйте знову.");
             }
             player_hp = attack(40, 30, player_hp, answer1, answer2);
         }
         return false;
+    }
+    private static int readChoice() {
+        while (true) {
+            String input = s.next();
+            if (choicePattern.matcher(input).matches()) {
+                return Integer.parseInt(input);
+            } else {
+                System.out.println("Неправильний ввід. Спробуйте знову.");
+            }
+        }
     }
 }
