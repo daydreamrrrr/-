@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"lab13","l":"Attack"},{"p":"lab13","l":"Battle"},{"p":"lab13","l":"Lab13"},{"p":"lab13","l":"Location"},{"p":"lab13","l":"Location1"},{"p":"lab13","l":"Location2"},{"p":"lab13","l":"Location3"},{"p":"lab13","l":"Weapons.Ranged"},{"p":"lab13","l":"Weapons"}];updateSearchResults();
