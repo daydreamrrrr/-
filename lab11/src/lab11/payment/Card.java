@@ -8,7 +8,7 @@ public class Card implements Payment {
     /**
      * баланс на карті
      */
-    static int balance = 1000;
+    static double balance = 1000;
 
     /**
      * інтерфейс оплати
@@ -16,7 +16,7 @@ public class Card implements Payment {
      * @param amount сума оплати
      */
     @Override
-    public void pay(int amount) {
+    public void pay(double amount) {
         if (amount <= balance) {
             balance -= amount;
             System.out.println("Операція успішна. Баланс: " + balance);

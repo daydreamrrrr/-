@@ -34,7 +34,7 @@ public class NFC implements Switch, Payment {
      * @param amount сума оплати
      */
     @Override
-    public void pay(int amount) {
+    public void pay(double amount) {
         if (!connected) {
             System.out.println("Прикладіть картку, будь ласка.");
 

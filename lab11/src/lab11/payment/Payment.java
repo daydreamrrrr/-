@@ -10,5 +10,5 @@ public interface Payment {
      *
      * @param amount сума оплати
      */
-    void pay(int amount);
+    void pay(double amount);
 }

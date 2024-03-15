@@ -3,6 +3,7 @@ package lab11;
 import java.util.Scanner;
 import lab11.payment.NFC;
 import lab11.payment.Card;
+import java.util.regex.Pattern;
 
 /**
  * головний клас програми
@@ -10,15 +11,21 @@ import lab11.payment.Card;
 public class Lab11 {
 
     /**
+     * сканер
+     */
+    private static final Scanner s = new Scanner(System.in);
+    /**
+     * патерни для перевірки вводу
+     */
+    private static final Pattern amountpattern1 = Pattern.compile("\\d+\\.\\d{2}");
+    private static final Pattern amountpattern2 = Pattern.compile("[1-9]\\d*");
+
+    /**
      * метод main з меню
      *
      * @param args
      */
     public static void main(String[] args) {
-        /**
-         * сканер
-         */
-        Scanner s = new Scanner(System.in);
         /**
          * екземпляр класу картки
          */
@@ -35,15 +42,12 @@ public class Lab11 {
             System.out.println("4. Сплатити через NFC");
             System.out.println("0. Вийти");
             System.out.print("Виберіть опцію: ");
-            int choice = s.nextInt();
+            int choice = readChoice();
             switch (choice) {
                 case 1:
                     System.out.print("Сума оплати: ");
-                    /**
-                     * введена сума оплати
-                     */
-                    int sum = s.nextInt();
-                    card.pay(sum);
+                    double amount = readAmount();
+                    card.pay(amount);
                     break;
                 case 2:
                     nfc.enable();
@@ -53,8 +57,8 @@ public class Lab11 {
                     break;
                 case 4:
                     System.out.print("Сума оплати: ");
-                    sum = s.nextInt();
-                    nfc.pay(sum);
+                    amount = readAmount();
+                    nfc.pay(amount);
                     break;
                 case 0:
                     System.out.println("Вихід.");
@@ -63,6 +67,27 @@ public class Lab11 {
                     System.out.println("Неправильний ввід. Спробуйте знову.");
             }
         }
+    }
 
+    private static double readAmount() {
+        while (true) {
+            String input = s.next();
+            if (amountpattern1.matcher(input).matches() || amountpattern2.matcher(input).matches()) {
+                return Double.parseDouble(input);
+            } else {
+                System.out.println("Неправильний ввід. Спробуйте знову.");
+            }
+        }
+    }
+
+    private static int readChoice() {
+        while (true) {
+            String input = s.next();
+            if (amountpattern2.matcher(input).matches()) {
+                return Integer.parseInt(input);
+            } else {
+                System.out.println("Неправильний ввід. Спробуйте знову.");
+            }
+        }
     }
 }
