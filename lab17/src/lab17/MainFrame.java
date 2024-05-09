@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
@@ -15,9 +16,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.Locale;
+import java.text.NumberFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -35,7 +34,12 @@ public class MainFrame extends javax.swing.JFrame {
     private String password = "";
     private DefaultTableModel dtm = new DefaultTableModel();
     private StatisticsFrame statistics = new StatisticsFrame();
-    private static final Pattern amountpattern1 = Pattern.compile("\\d+\\.\\d{2}");
+    private static final Pattern regex = Pattern.compile("[0-9]+([,.][0-9]{1,2})?");
+    private static final Pattern regex2 = Pattern.compile("\\d+(\\.\\d{1,2})?");
+    private static final NumberFormat formatter = NumberFormat.getCurrencyInstance();
+    private int total;
+    private int limit = 15;
+    private int currentPage = 1;
 
     /**
      * Creates new form MainFrame
@@ -45,22 +49,67 @@ public class MainFrame extends javax.swing.JFrame {
         this.getContentPane().setBackground(new Color(204, 204, 255));
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+        dtm.addColumn("ID");
         dtm.addColumn("Категорія");
         dtm.addColumn("Сума витрат");
         jTable.setModel(dtm);
-        try (Connection con = DriverManager.getConnection(connection, "root", "")) {
-            String sql = "SELECT * FROM Expenses";
-            try (Statement st = con.createStatement()) {
-                ResultSet result = st.executeQuery(sql);
-                while (result.next()) {
-                    dtm.addRow(new Object[]{result.getString(1), result.getString(2)});
+        loadData(currentPage, limit);
+    }
+
+    public static String format(BigDecimal amount) {
+        return formatter.format(amount);
+    }
+
+    private void getTotal() {
+        String sql = "SELECT COUNT(*) FROM Expenses";
+        int count = 0;
+        try (Connection conn = DriverManager.getConnection(connection, user, password)) {
+            try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+                ResultSet res = preparedStatement.executeQuery();
+                if (res.next()) {
+                    count = res.getInt(1);
                 }
-            } catch (SQLException se) {
-                JOptionPane.showMessageDialog(null, "Помилка при виконанні SQL-запиту: " + se.getMessage(), "Помилка", JOptionPane.ERROR_MESSAGE);
+                total = (int) Math.ceil((double) count / limit);
+                res.close();
+                preparedStatement.close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Помилка при підключенні: " + e.getMessage(), "Помилка", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
+        }
+    }
+
+    private void loadData(int currentPage, int limit) {
+        getTotal();
+        try (Connection conn = DriverManager.getConnection(connection, user, password)) {
+            int offset = (currentPage - 1) * limit;
+            String sql = "SELECT Id, Category, Amount FROM Expenses LIMIT ? OFFSET ?";
+            try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+                preparedStatement.setInt(1, limit);
+                preparedStatement.setInt(2, offset);
+                ResultSet res = preparedStatement.executeQuery();
+                while (res.next()) {
+                    int id = res.getInt(1);
+                    String category = res.getString(2);
+                    BigDecimal amount = res.getBigDecimal(3);
+                    String formattedAmount = format(amount);
+                    dtm.addRow(new Object[]{id, category, formattedAmount});
+                }
+                res.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+    }
+
+    private static BigDecimal parseAmount(String input) throws Exception {
+        if (input.matches("\\d+(,\\d{1,2})?|\\d+(\\.\\d{1,2})?")) {
+            return new BigDecimal(input.replace(",", "."));
+        } else {
+            throw new NumberFormatException("Неправильний формат суми");
         }
     }
 
@@ -83,6 +132,8 @@ public class MainFrame extends javax.swing.JFrame {
         updateButton = new javax.swing.JButton();
         showStatisticsButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
+        previousButton = new javax.swing.JButton();
+        nextButton = new javax.swing.JButton();
         jMenuBar = new javax.swing.JMenuBar();
         jMenu = new javax.swing.JMenu();
         clearButton = new javax.swing.JMenuItem();
@@ -146,6 +197,21 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        previousButton.setText("Попередня");
+        previousButton.setEnabled(false);
+        previousButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                previousButtonActionPerformed(evt);
+            }
+        });
+
+        nextButton.setText("Наступна");
+        nextButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nextButtonActionPerformed(evt);
+            }
+        });
+
         jMenu.setText("Файл");
 
         clearButton.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_DELETE, java.awt.event.InputEvent.CTRL_DOWN_MASK));
@@ -183,7 +249,7 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(29, 29, 29)
@@ -202,13 +268,18 @@ public class MainFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 428, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(previousButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(nextButton)
+                .addGap(163, 163, 163))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(9, 9, 9)
@@ -224,24 +295,33 @@ public class MainFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(deleteButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(showStatisticsButton)))
-                .addContainerGap(47, Short.MAX_VALUE))
+                        .addComponent(showStatisticsButton))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(previousButton)
+                    .addComponent(nextButton))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         try (Connection con = DriverManager.getConnection(connection, "root", "")) {
             String sql = "INSERT INTO Expenses (Category, Amount) VALUES (?, ?)";
             try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
                 String category = (String) jComboBox.getSelectedItem();
-                Double amount = Double.parseDouble(jTextField1.getText());
+                BigDecimal amount = parseAmount(jTextField1.getText());
                 preparedStatement.setString(1, category);
-                preparedStatement.setDouble(2, amount);
+                preparedStatement.setBigDecimal(2, amount);
                 preparedStatement.executeUpdate();
-                String output = String.valueOf(amount);
-                dtm.addRow(new Object[]{category, output});
+                String output = format(amount);
+                int id = (int) dtm.getValueAt((dtm.getRowCount() - 1), 0);
+                if (currentPage == total) {
+                    dtm.addRow(new Object[]{id + 1, category, output});
+                }
                 System.out.println("Запис занесено в таблицю");
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Помилка при записі", "Помилка", 1);
@@ -251,15 +331,8 @@ public class MainFrame extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }//GEN-LAST:event_addButtonActionPerformed
-   /* private double readAmount(String input) throws Exception {
-        if (amountpattern1.matcher(input).matches()) {
-            return Double.parseDouble(input);
-        } else {
-            throw new Exception("Помилка");
-        }
-    }
-*/
-    private void clear() {
+
+    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
         try (Connection con = DriverManager.getConnection(connection, "root", "")) {
             String sql = "TRUNCATE TABLE Expenses";
             try (Statement st = con.createStatement()) {
@@ -271,9 +344,6 @@ public class MainFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Помилка при підключенні: " + e.getMessage(), "Помилка", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
-    }
-    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
-        clear();
         dtm.setRowCount(0);
         JOptionPane.showMessageDialog(null, "Таблиця очищена.", "Успішно", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_clearButtonActionPerformed
@@ -326,32 +396,30 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
         try {
-            for (int i = 0; i < dtm.getRowCount(); i++) {
-                Double amount = Double.parseDouble((String) dtm.getValueAt(i, 1));
-            }
             try (Connection con = DriverManager.getConnection(connection, "root", "")) {
-                clear();
-                String sql = "INSERT INTO Expenses (Category, Amount) VALUES (?, ?)";
+                String sql = "UPDATE Expenses SET Amount = ? WHERE id = ?";
                 try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
                     for (int i = 0; i < dtm.getRowCount(); i++) {
-                        String category = (String) dtm.getValueAt(i, 0);
-                        Double amount = Double.parseDouble((String) dtm.getValueAt(i, 1));
-                        preparedStatement.setString(1, category);
-                        preparedStatement.setDouble(2, amount);
+                        int id = (int) dtm.getValueAt(i, 0);
+                        String cellValue = (String) dtm.getValueAt(i, 2);
+                        String cleanedValue = cellValue.replaceAll("[^\\d.,]", "");
+                        BigDecimal amount = parseAmount(cleanedValue);
+                        preparedStatement.setBigDecimal(1, amount);
+                        preparedStatement.setInt(2, id);
                         preparedStatement.executeUpdate();
                     }
-                    System.out.println("Запис занесено в таблицю");
                     JOptionPane.showMessageDialog(null, "Таблицю оновлено.", "Успішно", JOptionPane.INFORMATION_MESSAGE);
-
                 } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "Помилка при записі", "Помилка", 1);
+                    JOptionPane.showMessageDialog(null, "Помилка при оновленні таблиці: " + e.getMessage(), "Помилка", 1);
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Помилка при підключенні: " + e.getMessage(), "Помилка", 1);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Помилка при підключенні до бази даних: " + e.getMessage(), "Помилка", 1);
                 e.printStackTrace();
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Неправильний ввід", "Помилка", 1);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Некоректний ввід для суми оплати", "Помилка", 1);
+            e.printStackTrace();
         }
     }//GEN-LAST:event_updateButtonActionPerformed
 
@@ -362,7 +430,8 @@ public class MainFrame extends javax.swing.JFrame {
                 ResultSet result = st.executeQuery(sql);
                 dtm2.setRowCount(0);
                 while (result.next()) {
-                    dtm2.addRow(new Object[]{result.getString(1), result.getString(2)});
+                    String output = format(result.getBigDecimal(2));
+                    dtm2.addRow(new Object[]{result.getString(1), output});
                 }
                 statistics.setVisible(true);
             } catch (SQLException se) {
@@ -387,6 +456,31 @@ public class MainFrame extends javax.swing.JFrame {
             deleteButton.setEnabled(true);
         }
     }//GEN-LAST:event_jTableMouseClicked
+
+    private void previousButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previousButtonActionPerformed
+        nextButton.setEnabled(true);
+        dtm.setRowCount(0);
+        if (currentPage > 1) {
+            currentPage--;
+            loadData(currentPage, limit);
+        }
+        if (currentPage == 1) {
+            previousButton.setEnabled(false);
+        }
+    }//GEN-LAST:event_previousButtonActionPerformed
+
+    private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButtonActionPerformed
+        previousButton.setEnabled(true);
+        dtm.setRowCount(0);
+        getTotal();
+        if (currentPage < total) {
+            currentPage++;
+            loadData(currentPage, limit);
+        }
+        if (currentPage == total) {
+            nextButton.setEnabled(false);
+        }
+    }//GEN-LAST:event_nextButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -435,7 +529,9 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton nextButton;
     private javax.swing.JMenuItem openButton;
+    private javax.swing.JButton previousButton;
     private javax.swing.JMenuItem saveButton;
     private javax.swing.JButton showStatisticsButton;
     private javax.swing.JButton updateButton;
