@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import static java.lang.Thread.sleep;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Random;
 
 /**
@@ -132,13 +133,11 @@ class Racer extends Thread {
             }
         }
         textArea.append("\nПерегони завершено.\n");
-        Racer winner = racersList.get(0);
-        for (Racer racer : racersList) {
-            if (racer.getFinishTime() < winner.getFinishTime()) {
-                winner = racer;
-            }
+        racersList.sort(Comparator.comparingLong(Racer::getFinishTime));
+        textArea.append("Перші три переможці:\n");
+        for (int i = 0; i < 3 && i < racersList.size(); i++) {
+            textArea.append((i + 1) + ". " + racersList.get(i).getRacersName() + " з часом " + racersList.get(i).getFinishTime() + " мс.\n");
         }
-        textArea.append("Переможець: " + winner.getRacersName() + "\n");
     }//GEN-LAST:event_startButtonActionPerformed
 
     /**
