@@ -50,8 +50,8 @@ public class MainFrame extends javax.swing.JFrame {
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
         dtm.addColumn("ID");
-        dtm.addColumn("Категорія");
-        dtm.addColumn("Сума витрат");
+        dtm.addColumn("ГЉГ ГІГҐГЈГ®Г°ВіГї");
+        dtm.addColumn("Г‘ГіГ¬Г  ГўГЁГІГ°Г ГІ");
         jTable.setModel(dtm);
         loadData(currentPage, limit);
     }
@@ -109,7 +109,7 @@ public class MainFrame extends javax.swing.JFrame {
         if (input.matches("\\d+(,\\d{1,2})?|\\d+(\\.\\d{1,2})?")) {
             return new BigDecimal(input.replace(",", "."));
         } else {
-            throw new NumberFormatException("Неправильний формат суми");
+            throw new NumberFormatException("ГЌГҐГЇГ°Г ГўГЁГ«ГјГ­ГЁГ© ГґГ®Г°Г¬Г ГІ Г±ГіГ¬ГЁ");
         }
     }
 
@@ -141,23 +141,23 @@ public class MainFrame extends javax.swing.JFrame {
         openButton = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Лабораторна робота №17");
+        setTitle("Г‹Г ГЎГ®Г°Г ГІГ®Г°Г­Г  Г°Г®ГЎГ®ГІГ  В№17");
         setBackground(new java.awt.Color(204, 204, 255));
         setResizable(false);
 
-        addButton.setText("Додати");
+        addButton.setText("Г„Г®Г¤Г ГІГЁ");
         addButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addButtonActionPerformed(evt);
             }
         });
 
-        jComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Продукти", "Одяг та взуття", "Комунальні послуги", "Ліки", "Іншe" }));
+        jComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ГЏГ°Г®Г¤ГіГЄГІГЁ", "ГЋГ¤ГїГЈ ГІГ  ГўГ§ГіГІГІГї", "ГЉГ®Г¬ГіГ­Г Г«ГјГ­Ві ГЇГ®Г±Г«ГіГЈГЁ", "Г‹ВіГЄГЁ", "ВІГ­Гёe" }));
         jComboBox.setToolTipText("");
 
-        jLabel1.setText("Сума витрат:");
+        jLabel1.setText("Г‘ГіГ¬Г  ГўГЁГІГ°Г ГІ:");
 
-        jLabel2.setText("Виберіть категорію:");
+        jLabel2.setText("Г‚ГЁГЎГҐГ°ВіГІГј ГЄГ ГІГҐГЈГ®Г°ВіГѕ:");
 
         jTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -175,21 +175,21 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable);
 
-        updateButton.setText("Оновити");
+        updateButton.setText("ГЋГ­Г®ГўГЁГІГЁ");
         updateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 updateButtonActionPerformed(evt);
             }
         });
 
-        showStatisticsButton.setText("Статистика");
+        showStatisticsButton.setText("Г‘ГІГ ГІГЁГ±ГІГЁГЄГ ");
         showStatisticsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 showStatisticsButtonActionPerformed(evt);
             }
         });
 
-        deleteButton.setText("Видалити");
+        deleteButton.setText("Г‚ГЁГ¤Г Г«ГЁГІГЁ");
         deleteButton.setEnabled(false);
         deleteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -197,7 +197,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        previousButton.setText("Попередня");
+        previousButton.setText("ГЏГ®ГЇГҐГ°ГҐГ¤Г­Гї");
         previousButton.setEnabled(false);
         previousButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -205,17 +205,17 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        nextButton.setText("Наступна");
+        nextButton.setText("ГЌГ Г±ГІГіГЇГ­Г ");
         nextButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nextButtonActionPerformed(evt);
             }
         });
 
-        jMenu.setText("Файл");
+        jMenu.setText("Г”Г Г©Г«");
 
         clearButton.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_DELETE, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        clearButton.setText("Очистити");
+        clearButton.setText("ГЋГ·ГЁГ±ГІГЁГІГЁ");
         clearButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 clearButtonActionPerformed(evt);
@@ -224,7 +224,7 @@ public class MainFrame extends javax.swing.JFrame {
         jMenu.add(clearButton);
 
         saveButton.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        saveButton.setText("Зберегти як");
+        saveButton.setText("Г‡ГЎГҐГ°ГҐГЈГІГЁ ГїГЄ");
         saveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveButtonActionPerformed(evt);
@@ -233,7 +233,7 @@ public class MainFrame extends javax.swing.JFrame {
         jMenu.add(saveButton);
 
         openButton.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        openButton.setText("Відкрити");
+        openButton.setText("Г‚ВіГ¤ГЄГ°ГЁГІГЁ");
         openButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 openButtonActionPerformed(evt);
@@ -322,12 +322,12 @@ public class MainFrame extends javax.swing.JFrame {
                 if (currentPage == total) {
                     dtm.addRow(new Object[]{id + 1, category, output});
                 }
-                System.out.println("Запис занесено в таблицю");
+                System.out.println("Г‡Г ГЇГЁГ± Г§Г Г­ГҐГ±ГҐГ­Г® Гў ГІГ ГЎГ«ГЁГ¶Гѕ");
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Помилка при записі", "Помилка", 1);
+                JOptionPane.showMessageDialog(null, "ГЏГ®Г¬ГЁГ«ГЄГ  ГЇГ°ГЁ Г§Г ГЇГЁГ±Ві", "ГЏГ®Г¬ГЁГ«ГЄГ ", 1);
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Помилка при підключенні: " + e.getMessage(), "Помилка", 1);
+            JOptionPane.showMessageDialog(null, "ГЏГ®Г¬ГЁГ«ГЄГ  ГЇГ°ГЁ ГЇВіГ¤ГЄГ«ГѕГ·ГҐГ­Г­Ві: " + e.getMessage(), "ГЏГ®Г¬ГЁГ«ГЄГ ", 1);
             e.printStackTrace();
         }
     }//GEN-LAST:event_addButtonActionPerformed
@@ -338,14 +338,14 @@ public class MainFrame extends javax.swing.JFrame {
             try (Statement st = con.createStatement()) {
                 st.executeUpdate(sql);
             } catch (SQLException se) {
-                JOptionPane.showMessageDialog(null, "Помилка при виконанні SQL-запиту: " + se.getMessage(), "Помилка", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "ГЏГ®Г¬ГЁГ«ГЄГ  ГЇГ°ГЁ ГўГЁГЄГ®Г­Г Г­Г­Ві SQL-Г§Г ГЇГЁГІГі: " + se.getMessage(), "ГЏГ®Г¬ГЁГ«ГЄГ ", JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Помилка при підключенні: " + e.getMessage(), "Помилка", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "ГЏГ®Г¬ГЁГ«ГЄГ  ГЇГ°ГЁ ГЇВіГ¤ГЄГ«ГѕГ·ГҐГ­Г­Ві: " + e.getMessage(), "ГЏГ®Г¬ГЁГ«ГЄГ ", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
         dtm.setRowCount(0);
-        JOptionPane.showMessageDialog(null, "Таблиця очищена.", "Успішно", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Г’Г ГЎГ«ГЁГ¶Гї Г®Г·ГЁГ№ГҐГ­Г .", "Г“Г±ГЇВіГёГ­Г®", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_clearButtonActionPerformed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
@@ -358,7 +358,7 @@ public class MainFrame extends javax.swing.JFrame {
                     file.createNewFile();
                     FileWriter fl = new FileWriter(file);
                     for (int i = 0; i < dtm.getRowCount(); i++) {
-                        fl.write((String) dtm.getValueAt(i, 0) + "_" + (String) dtm.getValueAt(i, 1) + "_грн_\n");
+                        fl.write((String) dtm.getValueAt(i, 0) + "_" + (String) dtm.getValueAt(i, 1) + "_ГЈГ°Г­_\n");
                     }
                     fl.close();
                 } catch (IOException ex) {
@@ -408,17 +408,17 @@ public class MainFrame extends javax.swing.JFrame {
                         preparedStatement.setInt(2, id);
                         preparedStatement.executeUpdate();
                     }
-                    JOptionPane.showMessageDialog(null, "Таблицю оновлено.", "Успішно", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Г’Г ГЎГ«ГЁГ¶Гѕ Г®Г­Г®ГўГ«ГҐГ­Г®.", "Г“Г±ГЇВіГёГ­Г®", JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "Помилка при оновленні таблиці: " + e.getMessage(), "Помилка", 1);
+                    JOptionPane.showMessageDialog(null, "ГЏГ®Г¬ГЁГ«ГЄГ  ГЇГ°ГЁ Г®Г­Г®ГўГ«ГҐГ­Г­Ві ГІГ ГЎГ«ГЁГ¶Ві: " + e.getMessage(), "ГЏГ®Г¬ГЁГ«ГЄГ ", 1);
                     e.printStackTrace();
                 }
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "Помилка при підключенні до бази даних: " + e.getMessage(), "Помилка", 1);
+                JOptionPane.showMessageDialog(null, "ГЏГ®Г¬ГЁГ«ГЄГ  ГЇГ°ГЁ ГЇВіГ¤ГЄГ«ГѕГ·ГҐГ­Г­Ві Г¤Г® ГЎГ Г§ГЁ Г¤Г Г­ГЁГµ: " + e.getMessage(), "ГЏГ®Г¬ГЁГ«ГЄГ ", 1);
                 e.printStackTrace();
             }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Некоректний ввід для суми оплати", "Помилка", 1);
+            JOptionPane.showMessageDialog(null, "ГЌГҐГЄГ®Г°ГҐГЄГІГ­ГЁГ© ГўГўВіГ¤ Г¤Г«Гї Г±ГіГ¬ГЁ Г®ГЇГ«Г ГІГЁ", "ГЏГ®Г¬ГЁГ«ГЄГ ", 1);
             e.printStackTrace();
         }
     }//GEN-LAST:event_updateButtonActionPerformed
@@ -435,18 +435,28 @@ public class MainFrame extends javax.swing.JFrame {
                 }
                 statistics.setVisible(true);
             } catch (SQLException se) {
-                JOptionPane.showMessageDialog(null, "Помилка при виконанні SQL-запиту: " + se.getMessage(), "Помилка", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "ГЏГ®Г¬ГЁГ«ГЄГ  ГЇГ°ГЁ ГўГЁГЄГ®Г­Г Г­Г­Ві SQL-Г§Г ГЇГЁГІГі: " + se.getMessage(), "ГЏГ®Г¬ГЁГ«ГЄГ ", JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Помилка при підключенні: " + e.getMessage(), "Помилка", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "ГЏГ®Г¬ГЁГ«ГЄГ  ГЇГ°ГЁ ГЇВіГ¤ГЄГ«ГѕГ·ГҐГ­Г­Ві: " + e.getMessage(), "ГЏГ®Г¬ГЁГ«ГЄГ ", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }//GEN-LAST:event_showStatisticsButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         if (jTable.getSelectedRow() != -1) {
-            dtm.removeRow(jTable.getSelectedRow());
-            deleteButton.setEnabled(false);
+            int id = (int) dtm.getValueAt(jTable.getSelectedRow(), 0);
+            try (Connection con = DriverManager.getConnection(connection, user, password)) {
+                String sql = "DELETE FROM expenses WHERE id = ?";
+                PreparedStatement preparedStatement = con.prepareStatement(sql);
+                preparedStatement.setInt(1, id);
+                preparedStatement.executeUpdate();
+                dtm.removeRow(jTable.getSelectedRow());
+                deleteButton.setEnabled(false);
+            } catch (SQLException se) {
+                JOptionPane.showMessageDialog(null, "РџРѕРјРёР»РєР° РїСЂРё РІРёРєРѕРЅР°РЅРЅС– SQL-Р·Р°РїРёС‚Сѓ: " + se.getMessage(), "РџРѕРјРёР»РєР°", JOptionPane.ERROR_MESSAGE);
+            }
+        }
         }
 
     }//GEN-LAST:event_deleteButtonActionPerformed
