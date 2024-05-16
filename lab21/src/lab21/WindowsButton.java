@@ -18,7 +18,6 @@ public class WindowsButton implements Button {
         button.setBackground(new Color(169, 169, 169));
         button.setFont(new Font("Arial", Font.BOLD, 16));
         button.setFocusPainted(false);
-        button.setPreferredSize(new Dimension(150, 50));
         panel.add(button);
     }
 

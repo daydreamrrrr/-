@@ -18,10 +18,10 @@ public class MainFrame extends javax.swing.JFrame {
         this.setLayout(new GridLayout(1, 2));
         panel.setLayout(new FlowLayout());
         this.add(panel);
-        ButtonFactory wbf = new WinButtonFactory();
-        ButtonFactory mbf = new MacOSButtonFactory();
-        ClientClass cl1 = new ClientClass(wbf, panel);
-        ClientClass cl2 = new ClientClass(mbf, panel);
+        GUIFactory wgf = new WinGUIFactory();
+        GUIFactory mgf = new MacOSGUIFactory();
+        ClientClass cl1 = new ClientClass(wgf, panel);
+        ClientClass cl2 = new ClientClass(mgf, panel);
         cl1.paint();
         cl2.paint();
     }
@@ -43,11 +43,11 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 589, Short.MAX_VALUE)
+            .addGap(0, 619, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 63, Short.MAX_VALUE)
+            .addGap(0, 94, Short.MAX_VALUE)
         );
 
         pack();

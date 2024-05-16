@@ -1,11 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package lab21;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,7 +17,6 @@ public class MacOSButton implements Button {
         button.setBackground(new Color(192, 192, 192));
         button.setFont(new Font("Helvetica", Font.BOLD, 16));
         button.setFocusPainted(false);
-        button.setPreferredSize(new Dimension(150, 50));
         panel.add(button);
     }
 
